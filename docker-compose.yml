@@ -1,0 +1,29 @@
+name: odoo
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    command: [ "./odoo-bin" ]
+    volumes:
+      - .:/opt/odoo
+    ports:
+      - 8069:8069
+    depends_on:
+      - postgresql
+    tty: true
+    environment:
+      - PGHOST=postgresql
+      - PGPORT=5432
+      - PGUSER=odoo
+      - PGPASSWORD=postgres
+
+  postgresql:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
